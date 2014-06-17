@@ -17,6 +17,8 @@
     <!-- Custom styles for this template -->
     <link href="dist/css/portfolio.css" rel="stylesheet">
 
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700' rel='stylesheet' type='text/css'>
+
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
 
@@ -27,30 +29,23 @@
     <![endif]-->
   </head>
 
-  <body>
+  <body class="portfolio">
 
     <div class="navbar navbar-inverse navbar-fixed-top portfolioNav" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <!-- <img src="profilepic.jpg"> -->
           <a class="navbar-brand" href="#">
-            <img class="img-circle" style="max-width: 70px" src="profilepic.jpg"><!-- move style out of here -->
+            <!-- <img class="img-circle portfolio" style="max-width: 70px" src="profilepic.jpg"> -->
+            <div class="media">
+              <a class="pull-left" href="#">
+                <img class="media-object img-circle" style="max-width: 70px" src="profilepic.jpg">
+              </a>
+              <p class="navbar-text" style="margin-top: 0px"><strong class="name">Cameron Pittman</strong><br><position>Course Developer</position></p>
+            </div>  
           </a>
         </div>
         <div class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-left">
-            <li>
-              <p class="navbar-text">Cameron Pittman<br>Course Developer</p>
-            </li>
-          </ul>
-          <div class="navbar-brand udacity"><a href="#">Projects</a><a href="#">Resume</a></div>
-          <button type="button" class="btn btn-default navbar-btn navbar-right">Get in Touch!</button>
+          <button type="button" class="btn btn-default navbar-btn portfolio navbar-right">GET IN TOUCH!</button>
         </div>
       </div>
     </div>
