@@ -15,7 +15,7 @@
     <link href="dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="dist/css/jumbotron.css" rel="stylesheet">
+    <link href="dist/css/portfolio.css" rel="stylesheet">
 
     <!-- Just for debugging purposes. Don't actually copy this line! -->
     <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -29,7 +29,7 @@
 
   <body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="navbar navbar-inverse navbar-fixed-top portfolioNav" role="navigation">
       <div class="container">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -38,55 +38,55 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Project name</a>
+          <!-- <img src="profilepic.jpg"> -->
+          <a class="navbar-brand" href="#">
+            <img class="img-circle" style="max-width: 70px" src="profilepic.jpg">
+          </a>
         </div>
         <div class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">
-            <div class="form-group">
-              <input type="text" placeholder="Email" class="form-control">
-            </div>
-            <div class="form-group">
-              <input type="password" placeholder="Password" class="form-control">
-            </div>
-            <button type="submit" class="btn btn-success">Sign in</button>
-          </form>
-        </div><!--/.navbar-collapse -->
+          <ul class="nav navbar-nav navbar-left">
+            <li>
+              <p class="navbar-text">Cameron Pittman<br>Course Developer</p>
+            </li>
+          </ul>
+          <div class="navbar-brand udacity"><a href="#">Projects</a><a href="#">Resume</a></div>
+          <button type="button" class="btn btn-default navbar-btn navbar-right">Get in Touch!</button>
+        </div>
       </div>
     </div>
 
     <!-- Main jumbotron for a primary marketing message or call to action -->
     <div class="jumbotron">
       <div class="container" style="text-align: center">
-        <h1>Cameron Pittman</h1>
         <p>This is a template for a simple portfolio. After looking through this, you <strong>know</strong> you're going to want to hire me.</p>
         <p><a class="btn btn-primary btn-lg" role="button">Contact Me &raquo;</a></p>
       </div>
     </div>
 
-    <div class="container">
+    <div class="container container-lg-height">
       <!-- Example row of columns -->
-      <div class="row">
-        <div class="col-md-4">
+      <div id="projects" class="row row-lg-height">
+        <div class="col-md-4 col-top col-lg-height">
           <a data-toggle="modal" data-target="#lbModal">
             <img class="img-responsive" src="http://edtechtimes.com/wp-content/uploads/2013/09/20130904040156ENPRNPRN-LEARNBIG-LOGO-090413-1y-1378267316MR.jpg">
           </a>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-top col-lg-height">
           <img class="img-responsive" src="webperf1.png">
        </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-top col-lg-height">
           <img class="img-responsive" src="http://richardleis.files.wordpress.com/2013/11/udacity_logo_vert_orange_464x500.png">
         </div>
       </div>
 
-      <div class="row">
-        <div class="col-md-4">
+      <div class="row row-lg-height">
+        <div class="col-md-4 col-top col-lg-height">
           <img class="img-responsive" src="delightstudents.jpg">
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-top col-lg-height">
           <img class="img-responsive" src="http://physicswithportals.files.wordpress.com/2012/06/cropped-pwp21.jpg">
        </div>
-        <div class="col-md-4">
+        <div class="col-md-4 col-top col-lg-height">
          <img class="img-responsive" src="wbsc.png">
         </div>
       </div>
