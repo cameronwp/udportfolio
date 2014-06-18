@@ -50,6 +50,7 @@ The portfolio was built on Twitter's <a href="http://getbootstrap.com/">Bootstra
 
 Feeling uninspired by the portfolio? Here's a list of cool portfolios I found after a few minutes of Googling.
 
+* <a href="http://www.reddit.com/r/webdev/comments/280qkr/would_anybody_like_to_post_their_portfolio_site/">A great discussion about portfolios on reddit</a>
 * <a href="http://ianlunn.co.uk/">http://ianlunn.co.uk/</a>
 * <a href="http://www.adhamdannaway.com/portfolio">http://www.adhamdannaway.com/portfolio</a>
 * <a href="http://www.timboelaars.nl/">http://www.timboelaars.nl/</a>
