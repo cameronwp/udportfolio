@@ -37,15 +37,6 @@ a:hover {
   height: 100px;
 }
 
-.navbar-brand.udacity
-{
-  position: absolute;
-  width: 100%;
-  left: 0;
-  text-align: center;
-  margin: auto;
-}
-
 .navbar-inverse.portfolioNav {
   background-color: #2f2f2f;
 }
