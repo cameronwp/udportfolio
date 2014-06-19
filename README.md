@@ -17,14 +17,14 @@ Some useful tips to help you get started:
   ```
 
 1. Open a browser and visit localhost:8080
-1. Download and install [ngrok](https://ngrok.com/) to make your local server accessible remotely. 
+1. Download and install [ngrok](https://ngrok.com/) to make your local server accessible remotely.
 
   ``` bash
   $> cd /path/to/your-project-folder
   $> ngrok 8080
   ```
 
-1. Copy the public URL ngrok gives you and try running it through PageSpeed Insights!
+1. Copy the public URL ngrok gives you and try running it through PageSpeed Insights! [More on integrating ngrok, Grunt and PageSpeed.](http://www.jamescryer.com/2014/06/12/grunt-pagespeed-and-ngrok-locally-testing/)
 
 Profile, optimize, measure... and then lather, rinse, and repeat. Good luck!
 
@@ -50,6 +50,7 @@ The portfolio was built on Twitter's <a href="http://getbootstrap.com/">Bootstra
 
 Feeling uninspired by the portfolio? Here's a list of cool portfolios I found after a few minutes of Googling.
 
+* <a href="http://www.reddit.com/r/webdev/comments/280qkr/would_anybody_like_to_post_their_portfolio_site/">A great discussion about portfolios on reddit</a>
 * <a href="http://ianlunn.co.uk/">http://ianlunn.co.uk/</a>
 * <a href="http://www.adhamdannaway.com/portfolio">http://www.adhamdannaway.com/portfolio</a>
 * <a href="http://www.timboelaars.nl/">http://www.timboelaars.nl/</a>
