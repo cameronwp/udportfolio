@@ -6,8 +6,16 @@
 
     <meta name="author" content="[[ Enter your name here ]]">
     <meta name="description" content="[[ Brief about me here! ]]">
-    <title>Cameron's Rocking Portfolio</title>
+    <title>My Rocking Portfolio</title>
 
+
+    <!-- Bootstrap core CSS -->
+    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="dist/css/portfolio.css" rel="stylesheet">
+    <link href="dist/css/print.css" rel="stylesheet">
+    
     <script>
       (function(w,g){w['GoogleAnalyticsObject']=g;
       w[g]=w[g]||function(){(w[g].q=w[g].q||[]).push(arguments)};w[g].l=1*new Date();})(window,'ga');
@@ -16,18 +24,15 @@
       ga('create', 'UA-XXXX-Y');
       ga('send', 'pageview');
     </script>
-    <script async src='//www.google-analytics.com/analytics.js'></script>
-
-    <!-- Bootstrap core CSS -->
-    <link href="dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="dist/css/portfolio.css" rel="stylesheet">
+    <script src='http://www.google-analytics.com/analytics.js'></script>
 
     <!-- Web fonts -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700' rel='stylesheet' type='text/css'>
 
     <script src='https://apis.google.com/js/plusone.js'></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.js"></script>
+    <script src="dist/js/bootstrap.js"></script>
+    <script src="dist/js/angular.min.js"></script>
   </head>
 
   <body class="portfolio">
@@ -50,7 +55,7 @@
       </div>
     </div>
 
-    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <!-- Main jumbotron for intro and call to action -->
     <div class="jumbotron">
       <div class="container text-center">
         <p>I love <strong class="name">web development!</strong name> This is a template for a simple portfolio. I decided to use it to showcase a few Udacity courses I've taken and some teaching work, but you can use it to showcase any kind of project that you want the world to see :)</p>
@@ -59,7 +64,6 @@
     </div>
 
     <div class="container">
-      <!-- Example row of columns -->
       <div id="projects" class="row">
         <div class="col-md-4">
           <a href="page2/page2-2048.html" alt="2048 on Udacity">
@@ -124,13 +128,6 @@
       <footer>
         <p>&copy; Web Performance 2014</p>
       </footer>
-    </div> <!-- /container -->
-
-
-    <!-- Bootstrap core JavaScript
-    ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="dist/js/bootstrap.min.js"></script>
+    </div>
   </body>
 </html>

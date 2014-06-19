@@ -77,3 +77,42 @@ a:hover {
   margin-left: auto;
   margin-right: auto;
 }
+
+/* 4k ready! */
+@media only screen and (min-width: 3839px) {
+  div {
+    min-width: 3500px;
+  }
+
+  .proj-img-container {
+  height: 2150px;
+  width: 2250px;
+  margin: auto;
+  padding-top: 280px;
+  margin-bottom: 210px;
+}
+
+.navbar-btn.portfolio {
+  font-weight: 600;
+  background-color: #2f2f2f;
+  color: #D15400;
+  border-color: #D15400;
+  width: 2200px;
+  height: 260px;
+  font-size: 220px;
+  margin-top: 220px;
+}
+
+.btn-primary.portfolio {
+  font-weight: 600;
+  background-color: #2f2f2f;
+  color: #D15400;
+  border-color: #D15400;
+  width: 2200px;
+  height: 260px;
+  font-size: 220px;
+  padding-top: 215px;
+  margin-left: auto;
+  margin-right: auto;
+}
+} 
