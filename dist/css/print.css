@@ -1,9 +1,0 @@
-@media print {
-  button, .navbar, .header, .navbar-fixed-top, .portfolioNav, img {
-    display: none;
-  }
-
-  div {
-    width: 800px;
-  }
-}
