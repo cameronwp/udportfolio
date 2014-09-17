@@ -76,50 +76,51 @@ pizzaIngredients.nonMeats = [
   "Hummus"
 ];
 pizzaIngredients.cheeses = [
-  "American",
-  "Swiss",
-  "Goat",
-  "Mozzarella",
-  "Parmesean",
-  "Velveeta",
-  "Gouda",
-  "Muenster",
-  "Applewood",
-  "Asiago",
-  "Bleu",
-  "Boursin",
-  "Brie",
-  "Cheddar",
-  "Chevre",
-  "Havarti",
-  "Jack",
-  "Pepper Jack",
-  "Gruyere",
-  "Limberger",
-  "Manchego",
-  "Marscapone",
-  "Pecorino",
-  "Provolone",
-  "Queso",
-  "Roquefort",
-  "Romano",
-  "Ricotta",
+  "American Cheese",
+  "Swiss Cheese",
+  "Goat Cheese",
+  "Mozzarella Cheese",
+  "Parmesean Cheese",
+  "Velveeta Cheese",
+  "Gouda Cheese",
+  "Muenster Cheese",
+  "Applewood Cheese",
+  "Asiago Cheese",
+  "Bleu Cheese",
+  "Boursin Cheese",
+  "Brie Cheese",
+  "Cheddar Cheese",
+  "Chevre Cheese",
+  "Havarti Cheese",
+  "Jack Cheese",
+  "Pepper Jack Cheese",
+  "Gruyere Cheese",
+  "Limberger Cheese",
+  "Manchego Cheese",
+  "Marscapone Cheese",
+  "Pecorino Cheese",
+  "Provolone Cheese",
+  "Queso Cheese",
+  "Roquefort Cheese",
+  "Romano Cheese",
+  "Ricotta Cheese",
   "Smoked Gouda"
 ];
 pizzaIngredients.sauces = [
   "Red Sauce",
+  "Marinara",
   "BBQ Sauce",
   "No Sauce",
   "Hot Sauce"
 ];
 pizzaIngredients.crusts = [
-  "White",
-  "Whole Wheat",
-  "Flatbread",
-  "Stuffed"
+  "White Crust",
+  "Whole Wheat Crust",
+  "Flatbread Crust",
+  "Stuffed Crust"
 ];
 
-// from http://saturdaykid.com/usernames/generator.html
+// Name generator drawn from http://saturdaykid.com/usernames/generator.html
 // Capitalizes first letter of each word
 String.prototype.capitalize = function() {
   return this.charAt(0).toUpperCase() + this.slice(1);
@@ -269,7 +270,7 @@ function generator(adj, noun) {
   var nouns = getNoun(noun);
   var randomNumber1 = parseInt(Math.random() * adjectives.length);
   var randomNumber2 = parseInt(Math.random() * nouns.length);
-  var name = adjectives[randomNumber1].capitalize() + " " + nouns[randomNumber2].capitalize();
+  var name ="The " + adjectives[randomNumber1].capitalize() + " " + nouns[randomNumber2].capitalize();
   return name;
 };
 
@@ -336,26 +337,46 @@ var makeRandomPizza = function() {
 
 // all pizzas start with 'The'
 
-var pizzaDiv = document.getElementById("pizzaGenerator");
+var pizzasDiv = document.getElementById("pizzaGenerator");  // should this go in the for-loop below to make it super janky?
 
 var pizzaElementGenerator = function() {
-  var newPizzaDescription = document.createElement("div");
-  newPizzaDescription.classList.add("pizzaText");
+  var pizzaContainer = document.createElement("div");
+  pizzaContainer.classList.add("col-md-6");
 
-  var name = document.createElement("h4");
-  name.innerHTML = randomName();
+  var pizzaImageContainer = document.createElement("div");
+  pizzaImageContainer.classList.add("col-md-6");
 
-  newPizzaDescription.appendChild(name);
+  var pizzaImage = document.createElement("img");
+  pizzaImage.src = "images/pizza.png";
+  pizzaImage.classList.add("img-responsive");
+
+  pizzaImageContainer.appendChild(pizzaImage);
+
+  var pizzaDescriptionContainer = document.createElement("div");
+  pizzaDescriptionContainer.classList.add("col-md-6");
+
+  var pizzaName = document.createElement("h4");
+  pizzaName.innerHTML = randomName();
+
+  pizzaDescriptionContainer.appendChild(pizzaName);
 
   var ul = document.createElement("ul");
-  ul.innerHTML = makeRandomPizza();
+  ul.innerHTML = makeRandomPizza(); // a series of <li> elements with pizza ingredients
 
-  newPizzaDescription.appendChild(ul);
+  pizzaDescriptionContainer.appendChild(ul);
 
-  pizzaDiv.appendChild(newPizzaDescription);
+  pizzaContainer.appendChild(pizzaImageContainer);
+  pizzaContainer.appendChild(pizzaDescriptionContainer);
+
+  return pizzaContainer;
 }
 
-pizzaElementGenerator();
+for (var i = 0; i < 1000; i++) {
+  // var pizzasDiv = document.getElementById("pizzaGenerator");
+  pizzasDiv.appendChild(pizzaElementGenerator());
+}
+
+// pizzaElementGenerator();
 
 // var pizza1 = document.getElementById("pizza1");
 
