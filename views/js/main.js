@@ -34,7 +34,7 @@ pizzaIngredients.meats = [
   "Pastrami",
   "Kielbasa",
   "Scallops",
-  "Fried Egg"
+  "Filet Mignon"
 ];
 pizzaIngredients.nonMeats = [
   "White Onions",
@@ -73,6 +73,7 @@ pizzaIngredients.nonMeats = [
   "Olives",
   "Cauliflower",
   "Polenta",
+  "Fried Egg",
   "Hummus"
 ];
 pizzaIngredients.cheeses = [
@@ -337,14 +338,33 @@ var makeRandomPizza = function() {
 
 // all pizzas start with 'The'
 
-var pizzasDiv = document.getElementById("pizzaGenerator");  // should this go in the for-loop below to make it super janky?
+var pizzasDiv = document.getElementById("randomPizzas");  // should this go in the for-loop below to make it super janky?
 
-var pizzaElementGenerator = function() {
+var checkHeight = function(elem) {
+  var img = elem.querySelector("img");
+  var description = elem.querySelector("#pizzaDescription");
+  
+  if (img.height === 0 || description.height === 0) {
+    return;
+  }
+
+  if (img.height > description.height) {
+    return img.height;
+  } else {
+    return description.height;
+  }
+}
+
+var pizzaElementGenerator = function(i) {
   var pizzaContainer = document.createElement("div");
-  pizzaContainer.classList.add("col-md-6");
+  pizzaContainer.classList.add("col-md-3");
+  // pizzaContainer.style.height = "100%";
+  pizzaContainer.id = "pizza" + i.toString();
 
   var pizzaImageContainer = document.createElement("div");
   pizzaImageContainer.classList.add("col-md-6");
+  // pizzaImageContainer.classList.add("col-md-3");
+  // pizzaImageContainer.classList.add("col-md-push-3");
 
   var pizzaImage = document.createElement("img");
   pizzaImage.src = "images/pizza.png";
@@ -354,6 +374,8 @@ var pizzaElementGenerator = function() {
 
   var pizzaDescriptionContainer = document.createElement("div");
   pizzaDescriptionContainer.classList.add("col-md-6");
+  // pizzaDescriptionContainer.classList.add("col-md-push-3");
+  pizzaDescriptionContainer.id = "pizzaDescription";
 
   var pizzaName = document.createElement("h4");
   pizzaName.innerHTML = randomName();
@@ -368,24 +390,103 @@ var pizzaElementGenerator = function() {
   pizzaContainer.appendChild(pizzaImageContainer);
   pizzaContainer.appendChild(pizzaDescriptionContainer);
 
+  // resizing row heights to make sure text doesn't overflow
+  // pizzaContainer.style.height = checkHeight(pizzaContainer).toString() + "px";
+  // pizzaContainer.querySelector("img").style.height = checkHeight(pizzaContainer).toString() + "px";
+
   return pizzaContainer;
 }
 
-for (var i = 0; i < 1000; i++) {
-  // var pizzasDiv = document.getElementById("pizzaGenerator");
-  pizzasDiv.appendChild(pizzaElementGenerator());
+var resizePizzas = function(size) {   // size is one of: "small", "medium", "large", "xl" (reference to pizza size)
+  window.performance.mark("mark_start_resize");
+
+  function sizeConverter (size) {
+    switch(size) {
+      case "small":
+        return "col-md-3";
+      case "medium":
+        return "col-md-4";
+      case "large":
+        return "col-md-6";
+      case "xl":
+        return "col-md-8";
+      default:
+        console.log("bug in sizeConverter");
+        return "col-md-6";
+    }
+  }
+
+  function findCurrentSize () {
+    var elem = document.getElementById("pizza0");
+    var classes = elem.classList;
+    for (var i = 0; i < classes.length; i++) {
+      if (classes[i].search("col-md-") !== -1) {
+        return classes[i];
+      } else {
+        console.log("bug in findCurrentSize");
+        return "col-md-6";
+      }
+    }
+  }
+
+  console.log("size passed in: " + size);
+  newsize = sizeConverter(size);
+  console.log("pizzas will now have class: " + newsize);
+
+  oldsize = findCurrentSize();
+  console.log("the old class was: " + oldsize);
+
+  // this is too fast!
+  // function changePizzaClasses (oldsize, newsize) {
+  //   var pizzas = document.querySelector("#randomPizzas");
+    
+  //   for (var i = 0; i < pizzas.children.length; i++) {
+  //     pizzas.children[i].classList.remove(oldsize);
+  //     pizzas.children[i].classList.add(newsize);
+  //   }
+
+  //   console.log("changed pizza classes");
+  // }
+
+  // make this slower
+  function changePizzaClasses (oldsize, newsize) {
+    
+    for (var i = 0; i < 1000; i++) {
+      var pizzas = document.querySelector("#randomPizzas");
+      oldsize = findCurrentSize();
+      pizzas.children[i].classList.remove(oldsize);
+      pizzas.children[i].classList.add(newsize);
+    }
+
+    console.log("changed pizza classes");
+  }
+
+  if (newsize === oldsize) {
+    console.log("no size change");
+    return;
+  } else {
+    changePizzaClasses(oldsize, newsize);
+  }
+
+  // changePizzaClasses(oldsize, newsize);
+
+  // User Timing API is awesome
+  window.performance.mark("mark_end_resize");
+  window.performance.measure("measure_pizza_resize", "mark_start_resize", "mark_end_resize");
+  var timeToResize = window.performance.getEntriesByName("measure_pizza_resize");
+  console.log("Time to resize pizzas: " + timeToResize[0].duration + "ms");
 }
 
-// pizzaElementGenerator();
+window.performance.mark("mark_start_generating"); // collect timing data
 
-// var pizza1 = document.getElementById("pizza1");
+for (var i = 2; i < 1000; i++) {
+  var pizzasDiv = document.getElementById("randomPizzas");   // slows down initial generation by ~10ms
+  pizzasDiv.appendChild(pizzaElementGenerator(i));
+}
 
-// var pizzaElem = document.createElement("img");
-// pizzaElem.src = "images/pizza.png";
-// pizzaElem.classList.add("img-responsive");
+window.performance.mark("mark_end_generating");   // more timing data
+window.performance.measure("measure_pizza_generation", "mark_start_generating", "mark_end_generating");
+var timeToGenerate = window.performance.getEntriesByName("measure_pizza_generation");
+console.log("Time to generate initial pizzas: " + timeToGenerate[0].duration + "ms");
 
-// var addPizza = function(elem) {
-//   elem.appendChild(pizzaElem);
-// }
-
-// addPizza(pizza1);
+resizePizzas("xl");
