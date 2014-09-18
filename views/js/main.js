@@ -249,13 +249,13 @@ function getNoun(y) {
       return places;
     case "scifi":
       var scifi = ["robot", "alien", "raygun", "spaceship", "UFO", "rocket", "phaser", "astronaut", "spaceman", "planet", "star", "galaxy", 
-      "computer", "future", "timeMachine", "wormHole", "timeTraveller", "scientist", "invention", "martian", "pluto", "jupiter", "saturn", "mars",
+      "computer", "future", "timeMachine", "wormHole", "timeTraveler", "scientist", "invention", "martian", "pluto", "jupiter", "saturn", "mars",
       "quasar", "blackHole", "warpDrive", "laser", "orbit", "gears", "molecule", "electron", "neutrino", "proton", "experiment", "photon", "apparatus",
       "universe", "gravity", "darkMatter", "constellation", "circuit", "asteroid"];
       return scifi;
     default:
       var scifi = ["robot", "alien", "raygun", "spaceship", "UFO", "rocket", "phaser", "astronaut", "spaceman", "planet", "star", "galaxy", 
-      "computer", "future", "timeMachine", "wormHole", "timeTraveller", "scientist", "invention", "martian", "pluto", "jupiter", "saturn", "mars",
+      "computer", "future", "timeMachine", "wormHole", "timeTraveler", "scientist", "invention", "martian", "pluto", "jupiter", "saturn", "mars",
       "quasar", "blackHole", "warpDrive", "laser", "orbit", "gears", "molecule", "electron", "neutrino", "proton", "experiment", "photon", "apparatus",
       "universe", "gravity", "darkMatter", "constellation", "circuit", "asteroid"];
       return scifi;
@@ -357,8 +357,9 @@ var checkHeight = function(elem) {
 
 var pizzaElementGenerator = function(i) {
   var pizzaContainer = document.createElement("div");
-  pizzaContainer.classList.add("col-md-3","randomPizzaContainer");
-  // pizzaContainer.style.height = "100%";
+  // pizzaContainer.classList.add("col-md-3","randomPizzaContainer");
+  pizzaContainer.classList.add("randomPizzaContainer");
+  pizzaContainer.style.width = "50%";
   pizzaContainer.id = "pizza" + i;
 
   var pizzaImageContainer = document.createElement("div");
@@ -448,14 +449,18 @@ var resizePizzas = function(size) {   // size is one of: "small", "medium", "lar
   //   console.log("changed pizza classes");
   // }
 
+  function calculateNewWidth (elem) {
+    var oldwidth = elem.offsetWidth;
+    newwidth = 100 / ((100 / oldwidth) + 1);
+    return newwidth;
+  }
+
   // make this slower
-  function changePizzaClasses (oldsize, newsize) {
+  function changePizzaSizes () {
     
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
+    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {  // this is bad
       var pizzas = document.querySelector("#randomPizzas");
-      oldsize = findCurrentSize();
-      pizzas.children[i].classList.remove(oldsize);
-      pizzas.children[i].classList.add(newsize);
+      pizzas.children[i].style.width = calculateNewWidth( pizzas.children[i] );
     }
 
     console.log("changed pizza classes");
@@ -465,7 +470,7 @@ var resizePizzas = function(size) {   // size is one of: "small", "medium", "lar
     console.log("no size change");
     return;
   } else {
-    changePizzaClasses(oldsize, newsize);
+    changePizzaSizes(oldsize, newsize);
   }
 
   // changePizzaClasses(oldsize, newsize);
