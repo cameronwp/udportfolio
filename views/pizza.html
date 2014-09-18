@@ -7,23 +7,23 @@
   <link rel="stylesheet" href="css/jquery-ui.structure.min.css">
   <link rel="stylesheet" href="css/jquery-ui.min.css">
 
-  <script src="js/jquery.js"></script>
-  <script src="js/jquery-ui.min.js"></script>
+  <!--<script src="js/jquery.js"></script>
+  <script src="js/jquery-ui.min.js"></script>-->
 
   <script>
-  $(function() {                // TODO: needs labels
-    $( "#slider" ).slider({
-      value:100,
-      min: 0,
-      max: 500,
-      step: 50,
-      slide: function( event, ui ) {
-        $( "#amount" ).val( "$" + ui.value );
-        console.log(ui.value);
-      }
-    });
-    $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
-  });
+  // $(function() {                // TODO: needs labels
+  //   $( "#slider" ).slider({
+  //     value:100,
+  //     min: 0,
+  //     max: 500,
+  //     step: 50,
+  //     slide: function( event, ui ) {
+  //       $( "#amount" ).val( "$" + ui.value );
+  //       console.log(ui.value);
+  //     }
+  //   });
+  //   $( "#amount" ).val( "$" + $( "#slider" ).slider( "value" ) );
+  // });
   </script>
 
 </head>

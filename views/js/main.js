@@ -357,9 +357,9 @@ var checkHeight = function(elem) {
 
 var pizzaElementGenerator = function(i) {
   var pizzaContainer = document.createElement("div");
-  pizzaContainer.classList.add("col-md-3");
+  pizzaContainer.classList.add("col-md-3","randomPizzaContainer");
   // pizzaContainer.style.height = "100%";
-  pizzaContainer.id = "pizza" + i.toString();
+  pizzaContainer.id = "pizza" + i;
 
   var pizzaImageContainer = document.createElement("div");
   pizzaImageContainer.classList.add("col-md-6");
@@ -375,7 +375,7 @@ var pizzaElementGenerator = function(i) {
   var pizzaDescriptionContainer = document.createElement("div");
   pizzaDescriptionContainer.classList.add("col-md-6");
   // pizzaDescriptionContainer.classList.add("col-md-push-3");
-  pizzaDescriptionContainer.id = "pizzaDescription";
+  // pizzaDescriptionContainer.id = "pizzaDescription";
 
   var pizzaName = document.createElement("h4");
   pizzaName.innerHTML = randomName();
@@ -451,7 +451,7 @@ var resizePizzas = function(size) {   // size is one of: "small", "medium", "lar
   // make this slower
   function changePizzaClasses (oldsize, newsize) {
     
-    for (var i = 0; i < 1000; i++) {
+    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
       var pizzas = document.querySelector("#randomPizzas");
       oldsize = findCurrentSize();
       pizzas.children[i].classList.remove(oldsize);
@@ -479,8 +479,8 @@ var resizePizzas = function(size) {   // size is one of: "small", "medium", "lar
 
 window.performance.mark("mark_start_generating"); // collect timing data
 
+var pizzasDiv = document.getElementById("randomPizzas");   // slows down initial generation by ~10ms
 for (var i = 2; i < 1000; i++) {
-  var pizzasDiv = document.getElementById("randomPizzas");   // slows down initial generation by ~10ms
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -490,3 +490,7 @@ var timeToGenerate = window.performance.getEntriesByName("measure_pizza_generati
 console.log("Time to generate initial pizzas: " + timeToGenerate[0].duration + "ms");
 
 resizePizzas("xl");
+
+
+
+
