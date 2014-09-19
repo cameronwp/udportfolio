@@ -356,39 +356,44 @@ var checkHeight = function(elem) {
 }
 
 var pizzaElementGenerator = function(i) {
-  var pizzaContainer = document.createElement("div");
-  // pizzaContainer.classList.add("col-md-3","randomPizzaContainer");
-  pizzaContainer.classList.add("randomPizzaContainer");
-  pizzaContainer.style.width = "50%";
-  pizzaContainer.id = "pizza" + i;
+  var pizzaContainer,
+      pizzaImageContainer,
+      pizzaImage,
+      pizzaDescriptionContainer,
+      pizzaName,
+      ul;
 
-  var pizzaImageContainer = document.createElement("div");
+  pizzaContainer  = document.createElement("div");
+  pizzaImageContainer = document.createElement("div");
+  pizzaImage = document.createElement("img");
+  pizzaDescriptionContainer = document.createElement("div");
+  // pizzaContainer.classList.add("col-md-3","randomPizzaContainer");
+
+  // <div id="pizza"[i] style="width: 50%" class="randomPizzaContainer">
+  pizzaContainer.classList.add("randomPizzaContainer");
+  pizzaContainer.style.width = "30%";
+  pizzaContainer.id = "pizza" + i;
   pizzaImageContainer.classList.add("col-md-6");
   // pizzaImageContainer.classList.add("col-md-3");
   // pizzaImageContainer.classList.add("col-md-push-3");
 
-  var pizzaImage = document.createElement("img");
+  // <img class="img-responsive" src="images/pizza.png">
   pizzaImage.src = "images/pizza.png";
   pizzaImage.classList.add("img-responsive");
-
   pizzaImageContainer.appendChild(pizzaImage);
+  pizzaContainer.appendChild(pizzaImageContainer);
 
-  var pizzaDescriptionContainer = document.createElement("div");
+  // <div class="col-md-6"><h4></h4><ul><li></li></ul></div>
   pizzaDescriptionContainer.classList.add("col-md-6");
   // pizzaDescriptionContainer.classList.add("col-md-push-3");
   // pizzaDescriptionContainer.id = "pizzaDescription";
-
-  var pizzaName = document.createElement("h4");
+  pizzaName = document.createElement("h4");
   pizzaName.innerHTML = randomName();
-
   pizzaDescriptionContainer.appendChild(pizzaName);
 
-  var ul = document.createElement("ul");
+  ul = document.createElement("ul");
   ul.innerHTML = makeRandomPizza(); // a series of <li> elements with pizza ingredients
-
   pizzaDescriptionContainer.appendChild(ul);
-
-  pizzaContainer.appendChild(pizzaImageContainer);
   pizzaContainer.appendChild(pizzaDescriptionContainer);
 
   // resizing row heights to make sure text doesn't overflow
@@ -401,7 +406,7 @@ var pizzaElementGenerator = function(i) {
 var resizePizzas = function(size) {   // size is one of: "small", "medium", "large", "xl" (reference to pizza size)
   window.performance.mark("mark_start_resize");
 
-  function sizeConverter (size) {
+  function sizeConverter(size) {
     switch(size) {
       case "small":
         return "col-md-3";
@@ -417,7 +422,7 @@ var resizePizzas = function(size) {   // size is one of: "small", "medium", "lar
     }
   }
 
-  function findCurrentSize () {
+  function findCurrentSize() {
     var elem = document.getElementById("pizza0");
     var classes = elem.classList;
     for (var i = 0; i < classes.length; i++) {
@@ -437,8 +442,7 @@ var resizePizzas = function(size) {   // size is one of: "small", "medium", "lar
   oldsize = findCurrentSize();
   console.log("the old class was: " + oldsize);
 
-  // this is too fast!
-  function changePizzaClasses (oldsize, newsize) {
+  function changePizzaClasses (oldsize, newsize) {              // this is too fast!
     var pizzas = document.querySelector("#randomPizzas");
     
     for (var i = 0; i < pizzas.children.length; i++) {
@@ -449,31 +453,32 @@ var resizePizzas = function(size) {   // size is one of: "small", "medium", "lar
     console.log("changed pizza classes");
   }
 
-  function calculateNewWidth (elem) {
+  var containerwidth = document.querySelector("#randomPizzas").offsetWidth; // moved this out of calculatenewwidth because it's just too slow
+  function calculateNewWidth(elem, size) {
     var oldwidth = elem.offsetWidth;
-    newwidth = 100 / ((100 / oldwidth) + 1);
-    return newwidth;
+    console.log(oldwidth);
+    var percentwidth = oldwidth / containerwidth * 100;
+    // newwidth = 100 / ((100 / oldwidth) + size);
+    var newwidth = Math.round(percentwidth * size);
+    console.log("newwidth: " + newwidth);
+    return newwidth+'%';
   }
 
-  // make this slower
-  function changePizzaSizes () {
-    
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {  // this is bad
+
+  function changePizzaSizes(newsize) {            // embarrassingly slow
+    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length - 3; i++) {  // this is bad. so so bad
       var pizzas = document.querySelector("#randomPizzas");
-      pizzas.children[i].style.width = calculateNewWidth( pizzas.children[i] );
+      console.log( "old pizza widths are: " + pizzas.children[i].style.width );
+      // console.log( "old pizza widths are: " + pizzas.children[i].offsetWidth );
+      var newwidth = calculateNewWidth( pizzas.children[i], 1.5 );
+      console.log("new pizza widths should be: " + newwidth );
+      pizzas.children[i].style.width = newwidth;
+      // pizzas.children[i].style.width = pizzas.children[i].style.width.split("%")[0] * 2 + "%";
     }
-
-    console.log("changed pizza classes");
   }
 
-  if (newsize === oldsize) {
-    console.log("no size change");
-    return;
-  } else {
-    changePizzaSizes(oldsize, newsize);
-  }
-
-  // changePizzaClasses(oldsize, newsize);
+  changePizzaSizes(newsize);           // so slow
+  // changePizzaClasses(oldsize, newsize);      // fast!
 
   // User Timing API is awesome
   window.performance.mark("mark_end_resize");
@@ -484,8 +489,8 @@ var resizePizzas = function(size) {   // size is one of: "small", "medium", "lar
 
 window.performance.mark("mark_start_generating"); // collect timing data
 
-var pizzasDiv = document.getElementById("randomPizzas");   // slows down initial generation by ~10ms
-for (var i = 2; i < 1000; i++) {
+var pizzasDiv = document.getElementById("randomPizzas");   // slows down initial generation by ~10ms in the for-loop below
+for (var i = 2; i < 100; i++) {
   pizzasDiv.appendChild(pizzaElementGenerator(i));
 }
 
@@ -498,7 +503,7 @@ resizePizzas("xl");
 
 var frame = 0;
 
-function logAverageFrame (times) {
+function logAverageFrame(times) {
   var numberOfEntries = times.length;
   var sum = 0;
   for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
@@ -507,52 +512,52 @@ function logAverageFrame (times) {
   console.log("Average time to generate last 10 frames: " + sum / 10 + "ms");
 }
 
-function updatePositions() {
-  frame++;
-  window.performance.mark("mark_start_frame");
 
-  var heavyScroll = !! document.querySelector('#heavy-scroll').checked;
-  var items = document.querySelectorAll('.mover');
-  var cachedScrollTop = document.body.scrollTop;
-  for (var i = 0; i < items.length; i++) {
-    var phase;
-    if (heavyScroll) phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));    // nice and slow
-    // if (true) phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));    // nice and slow
-    else
-      phase = Math.sin((cachedScrollTop / 1250) + (i % 5));   // too fast
-    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
-  }
 
-  window.performance.mark("mark_end_frame");
-  window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
-  if (frame % 10 === 0) {
-    var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
-    logAverageFrame(timesToUpdatePosition);
-  }
-}
 
-function updatePaintClasses() {
-  var heavyPaint = !! document.querySelector('#heavy-paint').checked;
-  var items = document.querySelectorAll('.mover');
-  for (var i = 0; i < items.length; i++) {
-    if (heavyPaint) items[i].classList.add('heavy-painting');
-    else
-      items[i].classList.remove('heavy-painting');
-  }
-}
-// document.querySelector('#heavy-paint').addEventListener('click', updatePaintClasses);
-window.addEventListener('scroll', updatePositions);
-document.addEventListener('DOMContentLoaded', function() {
-  var cols = 8;
-  var s = 256;
-  for (var i = 0; i < 200; i++) {
-    var el = document.createElement('img');
-    el.className = 'mover';
-    el.src = "images/pizza.png";
-    el.basicLeft = (i % cols) * s;
-    el.style.top = (Math.floor(i / cols) * s) + 'px';
-    document.querySelector("#movingPizzas1").appendChild(el);
-  }
-  updatePaintClasses();
-  updatePositions();
-});
+/* commented out for debugging. uncomment for production */
+
+// // the following was pulled from Ilya's demo found at: https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
+// function updatePositions() {
+//   frame++;
+//   window.performance.mark("mark_start_frame");
+
+//   var items = document.querySelectorAll('.mover');
+//   var cachedScrollTop = document.body.scrollTop;
+//   for (var i = 0; i < items.length; i++) {
+//     // var phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));    // nice and slow
+//     var phase = Math.sin((cachedScrollTop / 1250) + (i % 5));               // the fast one
+//     items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+//   }
+
+//   window.performance.mark("mark_end_frame");
+//   window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+//   if (frame % 10 === 0) {
+//     var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
+//     logAverageFrame(timesToUpdatePosition);
+//   }
+// }
+
+// function addHeavyPaintClass() {     // remove - it's doing nothing
+//   var items = document.querySelectorAll('.mover');
+//   for (var i = 0; i < items.length; i++) {
+//     items[i].classList.add('heavy-painting');
+//   }
+// }
+// window.addEventListener('scroll', updatePositions);
+// document.addEventListener('DOMContentLoaded', function() {
+//   var cols = 8;
+//   var s = 256;
+//   for (var i = 0; i < 200; i++) {
+//     var elem = document.createElement('img');
+//     elem.className = 'mover';
+//     elem.src = "images/pizza.png";
+//     elem.style.height = "100px";
+//     elem.style.width = "73.333px";
+//     elem.basicLeft = (i % cols) * s;
+//     elem.style.top = (Math.floor(i / cols) * s) + 'px';
+//     document.querySelector("#movingPizzas1").appendChild(elem);
+//   }
+//   // addHeavyPaintClass();
+//   updatePositions();
+// });
