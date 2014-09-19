@@ -22,3 +22,12 @@
   box-shadow: 15px 15px 15px;
   -webkit-box-shadow: 15px 15px 15px;
 }
+
+.randomPizzaContainer {
+  float: left;
+}
+.randomPizzaContainer:after {
+  content: "";
+  display: table;
+  clear:both;
+ }

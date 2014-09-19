@@ -102,13 +102,13 @@
         <h3>Pizza Generator!</h3>
         <div class="row">
           <div class="col-md-12">
-            <div id="slider"></div>
+            <input id="sizeSlider" type="range" min="1" max="4" value="2" step="1" onchange="resizePizzas(this.value)"></input>
           </div>
         </div>
         <div id="randomPizzas" class="row">
           <div id="pizza0" class="randomPizzaContainer" style="width:50%;">
             <div class="col-md-6">
-              <img src="images/pizza.png" class="img-responsive randomPizzaContainer">
+              <img src="images/pizza.png" class="img-responsive">
             </div>
             <div class="col-md-6">
               <h4>The Udacity Special</h4>
@@ -125,7 +125,7 @@
           </div>
           <div id="pizza1" class="randomPizzaContainer" style="width:50%;">
             <div class="col-md-6">
-              <img src="images/pizza.png" class="img-responsive randomPizzaContainer">
+              <img src="images/pizza.png" class="img-responsive">
             </div>
             <div class="col-md-6">
               <h4>The Cameron Special</h4>

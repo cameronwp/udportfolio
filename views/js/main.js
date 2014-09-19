@@ -371,7 +371,7 @@ var pizzaElementGenerator = function(i) {
 
   // <div id="pizza"[i] style="width: 50%" class="randomPizzaContainer">
   pizzaContainer.classList.add("randomPizzaContainer");
-  pizzaContainer.style.width = "30%";
+  pizzaContainer.style.width = "33.33%";
   pizzaContainer.id = "pizza" + i;
   pizzaImageContainer.classList.add("col-md-6");
   // pizzaImageContainer.classList.add("col-md-3");
@@ -403,82 +403,54 @@ var pizzaElementGenerator = function(i) {
   return pizzaContainer;
 }
 
-var resizePizzas = function(size) {   // size is one of: "small", "medium", "large", "xl" (reference to pizza size)
+var resizePizzas = function(size) { 
   window.performance.mark("mark_start_resize");
+  console.log("size passed in to resizePizzas: " + size);
 
-  function sizeConverter(size) {
-    switch(size) {
-      case "small":
-        return "col-md-3";
-      case "medium":
-        return "col-md-4";
-      case "large":
-        return "col-md-6";
-      case "xl":
-        return "col-md-8";
-      default:
-        console.log("bug in sizeConverter");
-        return "col-md-6";
-    }
-  }
+  function determineDx (elem, size) {
+    var oldwidth = elem.offsetWidth;
+    var windowwidth = document.querySelector("#randomPizzas").offsetWidth;
+    var oldsize = oldwidth / windowwidth;
+    console.log("oldsize: " + oldsize);
+    console.log("size: " + size);
 
-  function findCurrentSize() {
-    var elem = document.getElementById("pizza0");
-    var classes = elem.classList;
-    for (var i = 0; i < classes.length; i++) {
-      if (classes[i].search("col-md-") !== -1) {
-        return classes[i];
-      } else {
-        console.log("bug in findCurrentSize");
-        return "col-md-6";
+    function sizeSwitcher (size) {
+      switch(size) {
+        case "1":
+          return 0.25;
+        case "2":
+          return 0.3333;
+        case "3":
+          return 0.5;
+        case "4":
+          return 0.75;
+        default:
+          console.log("bug in sizeSwitcher");
       }
     }
+
+    var newsize = sizeSwitcher(size);
+
+    console.log("newsize: " + newsize);
+
+    var dx = 0;
+
+    dx = (newsize - oldsize) * windowwidth;
+
+    console.log("dx: " + dx);
+    return dx;
   }
 
-  console.log("size passed in: " + size);
-  newsize = sizeConverter(size);
-  console.log("pizzas will now have class: " + newsize);
-
-  oldsize = findCurrentSize();
-  console.log("the old class was: " + oldsize);
-
-  function changePizzaClasses (oldsize, newsize) {              // this is too fast!
+  function changePizzaSizes(size) {            // embarrassingly slow
     var pizzas = document.querySelector("#randomPizzas");
-    
-    for (var i = 0; i < pizzas.children.length; i++) {
-      pizzas.children[i].classList.remove(oldsize);
-      pizzas.children[i].classList.add(newsize);
-    }
-
-    console.log("changed pizza classes");
-  }
-
-  var containerwidth = document.querySelector("#randomPizzas").offsetWidth; // moved this out of calculatenewwidth because it's just too slow
-  function calculateNewWidth(elem, size) {
-    var oldwidth = elem.offsetWidth;
-    console.log(oldwidth);
-    var percentwidth = oldwidth / containerwidth * 100;
-    // newwidth = 100 / ((100 / oldwidth) + size);
-    var newwidth = Math.round(percentwidth * size);
-    console.log("newwidth: " + newwidth);
-    return newwidth+'%';
-  }
-
-
-  function changePizzaSizes(newsize) {            // embarrassingly slow
-    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length - 3; i++) {  // this is bad. so so bad
-      var pizzas = document.querySelector("#randomPizzas");
-      console.log( "old pizza widths are: " + pizzas.children[i].style.width );
-      // console.log( "old pizza widths are: " + pizzas.children[i].offsetWidth );
-      var newwidth = calculateNewWidth( pizzas.children[i], 1.5 );
-      console.log("new pizza widths should be: " + newwidth );
-      pizzas.children[i].style.width = newwidth;
-      // pizzas.children[i].style.width = pizzas.children[i].style.width.split("%")[0] * 2 + "%";
+    for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {  // this is bad. so so bad
+      var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
+      var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+      document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
     }
   }
 
-  changePizzaSizes(newsize);           // so slow
-  // changePizzaClasses(oldsize, newsize);      // fast!
+  changePizzaSizes(size);             // so slow
 
   // User Timing API is awesome
   window.performance.mark("mark_end_resize");
@@ -499,7 +471,11 @@ window.performance.measure("measure_pizza_generation", "mark_start_generating", 
 var timeToGenerate = window.performance.getEntriesByName("measure_pizza_generation");
 console.log("Time to generate initial pizzas: " + timeToGenerate[0].duration + "ms");
 
-resizePizzas("xl");
+// resizePizzas(10);
+
+var slider = document.querySelector("sizeSlider");
+
+
 
 var frame = 0;
 
@@ -512,10 +488,7 @@ function logAverageFrame(times) {
   console.log("Average time to generate last 10 frames: " + sum / 10 + "ms");
 }
 
-
-
-
-/* commented out for debugging. uncomment for production */
+/* commented out for debugging */
 
 // // the following was pulled from Ilya's demo found at: https://www.igvita.com/slides/2012/devtools-tips-and-tricks/jank-demo.html
 // function updatePositions() {
