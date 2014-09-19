@@ -438,16 +438,16 @@ var resizePizzas = function(size) {   // size is one of: "small", "medium", "lar
   console.log("the old class was: " + oldsize);
 
   // this is too fast!
-  // function changePizzaClasses (oldsize, newsize) {
-  //   var pizzas = document.querySelector("#randomPizzas");
+  function changePizzaClasses (oldsize, newsize) {
+    var pizzas = document.querySelector("#randomPizzas");
     
-  //   for (var i = 0; i < pizzas.children.length; i++) {
-  //     pizzas.children[i].classList.remove(oldsize);
-  //     pizzas.children[i].classList.add(newsize);
-  //   }
+    for (var i = 0; i < pizzas.children.length; i++) {
+      pizzas.children[i].classList.remove(oldsize);
+      pizzas.children[i].classList.add(newsize);
+    }
 
-  //   console.log("changed pizza classes");
-  // }
+    console.log("changed pizza classes");
+  }
 
   function calculateNewWidth (elem) {
     var oldwidth = elem.offsetWidth;
@@ -496,6 +496,63 @@ console.log("Time to generate initial pizzas: " + timeToGenerate[0].duration + "
 
 resizePizzas("xl");
 
+var frame = 0;
 
+function logAverageFrame (times) {
+  var numberOfEntries = times.length;
+  var sum = 0;
+  for (var i = numberOfEntries - 1; i > numberOfEntries - 11; i--) {
+    sum = sum + times[i].duration;
+  }
+  console.log("Average time to generate last 10 frames: " + sum / 10 + "ms");
+}
 
+function updatePositions() {
+  frame++;
+  window.performance.mark("mark_start_frame");
 
+  var heavyScroll = !! document.querySelector('#heavy-scroll').checked;
+  var items = document.querySelectorAll('.mover');
+  var cachedScrollTop = document.body.scrollTop;
+  for (var i = 0; i < items.length; i++) {
+    var phase;
+    if (heavyScroll) phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));    // nice and slow
+    // if (true) phase = Math.sin((document.body.scrollTop / 1250) + (i % 5));    // nice and slow
+    else
+      phase = Math.sin((cachedScrollTop / 1250) + (i % 5));   // too fast
+    items[i].style.left = items[i].basicLeft + 100 * phase + 'px';
+  }
+
+  window.performance.mark("mark_end_frame");
+  window.performance.measure("measure_frame_duration", "mark_start_frame", "mark_end_frame");
+  if (frame % 10 === 0) {
+    var timesToUpdatePosition = window.performance.getEntriesByName("measure_frame_duration");
+    logAverageFrame(timesToUpdatePosition);
+  }
+}
+
+function updatePaintClasses() {
+  var heavyPaint = !! document.querySelector('#heavy-paint').checked;
+  var items = document.querySelectorAll('.mover');
+  for (var i = 0; i < items.length; i++) {
+    if (heavyPaint) items[i].classList.add('heavy-painting');
+    else
+      items[i].classList.remove('heavy-painting');
+  }
+}
+// document.querySelector('#heavy-paint').addEventListener('click', updatePaintClasses);
+window.addEventListener('scroll', updatePositions);
+document.addEventListener('DOMContentLoaded', function() {
+  var cols = 8;
+  var s = 256;
+  for (var i = 0; i < 200; i++) {
+    var el = document.createElement('img');
+    el.className = 'mover';
+    el.src = "images/pizza.png";
+    el.basicLeft = (i % cols) * s;
+    el.style.top = (Math.floor(i / cols) * s) + 'px';
+    document.querySelector("#movingPizzas1").appendChild(el);
+  }
+  updatePaintClasses();
+  updatePositions();
+});

@@ -10,3 +10,15 @@
 .pizzaText {
 
 }
+
+.mover {
+  position: fixed;
+  width: 256px;
+}
+
+.heavy-painting {
+  background-image: -webkit-linear-gradient(45deg,rgba(0, 0, 0, 0.05) 25%,transparent 25%,transparent),-webkit-linear-gradient(-45deg,rgba(0, 0, 0, 0.05) 25%,transparent 25%,transparent),-webkit-linear-gradient(45deg,transparent 75%,rgba(0, 0, 0, 0.05) 75%),-webkit-linear-gradient(-45deg,transparent 75%,rgba(0, 0, 0, 0.05) 75%);
+  background-size: 3px 3px;
+  box-shadow: 15px 15px 15px;
+  -webkit-box-shadow: 15px 15px 15px;
+}
