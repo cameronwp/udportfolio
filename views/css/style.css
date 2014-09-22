@@ -9,23 +9,24 @@
 
 body {
   font-family: "Trebuchet MS", Helvetica, sans-serif;
-}
-
-h1 {
-  
-}
-
-body {
   background: black;
 }
 
-button {
+input {
   background: grey;
   font-size: 18px;
 }
 
-.pizzaText {
+form {
+  display: inline-block;
+}
 
+.centered {
+  text-align: center;
+}
+
+#pizzaSize {
+  font-weight: 800;
 }
 
 .mover {
