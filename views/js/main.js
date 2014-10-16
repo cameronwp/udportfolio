@@ -537,3 +537,96 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   updatePositions();
 });
+
+// To measure framerate automatically
+
+// check if query in url
+// if so, scroll page up and down in small intervals (preferrably smoothly) repeatedly
+// change logAverageFrame to record framerate data for as long as scrollPage keeps going
+// click once on change pizza divs. record time to change
+// set cookie when scroll finishes
+// *or* could use localStorage
+// close window
+
+// function reportFPS (msg) {
+//   // alert(msg[0]);
+//   // var message = msg;
+//   // alert(message);
+//   var reMS = /[1-9]+\.[0-9]+/;
+//   var timeMS = parseFloat(msg.match(reMS));
+//   var timeS = timeMS * 0.001;  
+//   var fps = 1.0 / timeS;
+//   alert(fps);
+//   // return parseInt(fps);
+// }
+
+
+
+// // var logger = console.log;
+// console.log = reportFPS;
+
+function scroller (argument) {
+  for (var i = 0; i < 10; i++) {
+    window.scrollBy(0,1);
+  }
+}
+
+
+// (function takeOverConsole(){
+//     var console = window.console;
+//     if (!console) return;
+//     function intercept(method){
+//       var original = console[method];
+//       console[method] = function(){
+//         var message = Array.prototype.slice.apply(arguments).join(' ')
+//         // do sneaky stuff
+//         var reMS = /[1-9]+\.[0-9]+/;
+//         var timeMS = parseFloat(message.match(reMS));
+//         var timeS = timeMS * 0.001;  
+//         var fps = 1.0 / timeS;
+//         alert(fps);
+
+//         original.call(console, message);
+//       }
+//     }
+//     var methods = ['log', 'warn', 'error']
+//     for (var i = 0; i < methods.length; i++)
+//         intercept(methods[i])
+// })();
+
+
+
+
+
+// (function takeOverConsole(){
+//     var original = window.console;
+//     window.console.log = function(){
+//         // do sneaky stuff
+//         var reMS = /[1-9]+\.[0-9]+/;
+//         var timeMS = parseFloat(msg.match(reMS));
+//         var timeS = timeMS * 0.001;  
+//         var fps = 1.0 / timeS;
+//         alert(fps);
+
+//         original.log.apply(original, arguments)
+//     };
+// }());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
