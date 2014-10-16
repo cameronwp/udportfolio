@@ -309,12 +309,19 @@ chrome.extension.sendMessage({}, function(response) {
 
 
             if (message.indexOf("Average time to generate last 10 frames:") !== -1) {
-                var reMS = /[1-9]+\.[0-9]+/;
-                var timeMS = parseFloat(message.match(reMS));
-                var timeS = timeMS * 0.001;  
-                var fps = 1.0 / timeS;
-                // alert(fps);    // fps works. sometimes NaN? might need to deal with that.
-                fpsArray.push(fps);
+              var reMS = /[1-9]+\.[0-9]+/;
+              var timeMS = parseFloat(message.match(reMS));
+              var timeS = timeMS * 0.001;  
+              var fps = 1.0 / timeS;
+              // alert(fps);    // fps works. sometimes NaN? might need to deal with that.
+              fpsArray.push(fps);
+              // fpsArray.push(fps); // TODO: make special push for this array
+            }
+
+            if (message.indexOf("Time to resize pizzas:") !== -1) {
+              var reMS = /[1-9]+\.[0-9]+/;
+              var timeMS = parseFloat(message.match(reMS));
+              document.querySelector("#resizeDiv").innerHTML = "Time to resize pizzas: " + timeMS + "ms";
             }
 
             original.call(console, message);
@@ -341,6 +348,9 @@ chrome.extension.sendMessage({}, function(response) {
       var fpsDiv = document.createElement('div');
       fpsDiv.id = "fpsDiv";
 
+      var resizeDiv = document.createElement('div');
+      resizeDiv.id = "resizeDiv";
+
       var textInput = document.createElement("input");
       textInput.id = "stdURL";
       textInput.type = "text";
@@ -359,6 +369,7 @@ chrome.extension.sendMessage({}, function(response) {
 
       body.insertBefore(scoreResults, body.firstChild);
 
+      scoreResults.appendChild(resizeDiv);
       scoreResults.appendChild(fpsDiv);
       scoreResults.appendChild(psiDiv);
       scoreResults.appendChild(textInput);
@@ -382,8 +393,9 @@ chrome.extension.sendMessage({}, function(response) {
         window.scrollBy(0,50);
       }, 100)
       setTimeout(function() {
-        window.clearInterval(scrolltimer)
-      }, 1000);
+        window.clearInterval(scrolltimer);
+        window.scrollTo(0,0);
+      }, 2000);
     }
 
     setTimeout(function() {
@@ -391,9 +403,13 @@ chrome.extension.sendMessage({}, function(response) {
     }, 1500);
 
     function clickRandomPizzas() {
+      var resizeDiz = document.querySelector("#resizeDiv");
       resizePizzas("1");
     }
-    
+
+    setTimeout(function() {
+      runAsPage(clickRandomPizzas);
+    }, 3000)
 
 
     // setTimeout(injectAnythingIntoPageScript(scroller), 1500);
