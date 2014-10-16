@@ -274,12 +274,16 @@ chrome.extension.sendMessage({}, function(response) {
     function takeOverConsole(){
         var fpsArray = [];
 
+        function pushFPS(number) {
+          var fpsDiv = document.querySelector("#fpsDiv");
+          fpsDiv.innerHTML = "FPS: " + number;
+        }
+
         Array.prototype.push = function() {
           var sum = 0;
           for( var i = 0, l = arguments.length; i < l; i++ )
           {
             this[this.length] = arguments[i];
-            // alert(fpsArray);
           }
 
           if ( arguments[0].toString().match(/[1-9]+\.[0-9]+/) === null ) return this.length;
@@ -288,8 +292,8 @@ chrome.extension.sendMessage({}, function(response) {
             sum = sum + fpsArray[i];
           }
           // alert(sum);
-          var averageFPS = sum / parseFloat(fpsArray.length);
-          alert(averageFPS);  // seems to be working!!!
+          var averageFPS = sum / parseFloat(fpsArray.length); // sometimes NaN?
+          pushFPS(averageFPS);
           return this.length;
         };
         
@@ -335,6 +339,8 @@ chrome.extension.sendMessage({}, function(response) {
       psiDiv.id = "psiDiv";
 
       var fpsDiv = document.createElement('div');
+      fpsDiv.id = "fpsDiv";
+
       var textInput = document.createElement("input");
       textInput.id = "stdURL";
       textInput.type = "text";
@@ -345,6 +351,7 @@ chrome.extension.sendMessage({}, function(response) {
       var btnInput = document.createElement("button");
       btnInput.id = "btn";
       btnInput.value = "Score PS Insights";
+      btnInput.innerHTML = "Score Portfolio!";
       // btnInput.onclick = runTests.bind(window, null);   // maybe document?
       btnInput.onclick = runTests;
 
@@ -354,9 +361,8 @@ chrome.extension.sendMessage({}, function(response) {
 
       scoreResults.appendChild(fpsDiv);
       scoreResults.appendChild(psiDiv);
-      scoreResults.appendChild(btnInput);
       scoreResults.appendChild(textInput);
-
+      scoreResults.appendChild(btnInput);
     }
     // injectAnythingIntoPageScript(divBuilder);
     runAsPage(divBuilder);
@@ -369,18 +375,33 @@ chrome.extension.sendMessage({}, function(response) {
     //need to run
 
     // need to scroll
-    function scroller () {
-      var scrolltimer = window.setInterval(function() {
+    function scroller() {
+      window.scrollTo(0,0);
+      var scrolltimer = setInterval(function() {
         console.log("scrolling!");
-        scrollBy(0,50);
-      }, 1)
-      window.setTimeout(clearInterval(scrolltimer), 500);  // do like bind?
+        window.scrollBy(0,50);
+      }, 100)
+      setTimeout(function() {
+        window.clearInterval(scrolltimer)
+      }, 1000);
     }
-    // runAsPage(scroller);
+
+    setTimeout(function() {
+      runAsPage(scroller)
+    }, 1500);
+
+    function clickRandomPizzas() {
+      resizePizzas("1");
+    }
+    
+
+
+    // setTimeout(injectAnythingIntoPageScript(scroller), 1500);
+    // setTimeout(injectAnythingIntoPageScript("scroller();"), 2000);
 
 
     // runAsPage(arrayPusherHack);
-    setTimeout(runAsPage.bind('bullshit', takeOverConsole), 2000);
+    setTimeout(runAsPage.bind('bullshit', takeOverConsole), 1000);
     // setTimeout(runAsPage.bind('bullshit', startPSI), 1000);
     // setTimeout(runAsPage.bind('bullshit', psiFuncs), 1);
     // runAsPage(buildNewElements);
