@@ -10,6 +10,7 @@ chrome.extension.sendMessage({}, function(response) {
     console.log("Hello. This message was sent from scripts/inject.js");
     // ----------------------------------------------------------
 
+    // helper functions to inject scripts
     var runAsPage = function(fun) {
       // only run functions
       if (!typeof fun === 'function') return false;
@@ -25,7 +26,6 @@ chrome.extension.sendMessage({}, function(response) {
       // success
       return true;
     };
-
     var injectAnythingIntoPageScript = function(js) {
       // doesn't run functions
      
@@ -40,21 +40,22 @@ chrome.extension.sendMessage({}, function(response) {
       // success
       return true;
     };
-    // var injectLotsOfThingsIntoPageScript = function() {
-    //   // doesn't run functions
+    // not sure if this last one works
+    var injectLotsOfThingsIntoPageScript = function() {
+      // doesn't run functions
      
-    //   var script = document.createElement('script');
-    //   // var scriptContent = '(' + fun.toString() + ')();';
-    //   var scriptContent = "";
-    //   for (fun in arguments) scriptContent = scriptContent + arguments[fun].toString();
+      var script = document.createElement('script');
+      // var scriptContent = '(' + fun.toString() + ')();';
+      var scriptContent = "";
+      for (fun in arguments) scriptContent = scriptContent + arguments[fun].toString();
      
-    //   // add script content to the script, and add the script to the body, "running it"
-    //   script.appendChild(document.createTextNode(scriptContent));
-    //   document.body.appendChild(script);
+      // add script content to the script, and add the script to the body, "running it"
+      script.appendChild(document.createTextNode(scriptContent));
+      document.body.appendChild(script);
      
-    //   // success
-    //   return true;
-    // };
+      // success
+      return true;
+    };
 
     // psi api
     function searchKeyPress(e) {
@@ -68,82 +69,72 @@ chrome.extension.sendMessage({}, function(response) {
     }
     injectAnythingIntoPageScript(searchKeyPress);
 
-    // var psiDiv = document.querySelector("#PSI");
-
-
     function getStudentURL() {
-      studentURL = document.querySelector('#stdURL').value;    // should be moved
+      var studentURL = document.querySelector('#stdURL').value;    // should be moved
       console.log("Running PS Insights Test against: " + studentURL);
       return studentURL;
     }
     injectAnythingIntoPageScript(getStudentURL);
 
-    var studentURL = "";
-    injectAnythingIntoPageScript('var studentURL = "";');
-    var apiKey = "AIzaSyAHehZ3CRwWG3cpCGF3WRTLdWxD0XXDdaI";  //identified as localhost
-    var psiURL = 'https://www.googleapis.com/pagespeedonline/v1/runPagespeed?';
-
-    var waitingText = "Querying the PageSpeed API...";
-
-    // Object that will hold the callbacks that process results from the
-    // PageSpeed Insights API.
-    var callbacks = {}
-
-
-    callbacks.clearScreen = function() {
-      if (psiDiv.innerHTML === waitingText) psiDiv.innerHTML = "";
-    }
-    injectAnythingIntoPageScript(callbacks.clearScreen);
-
-    callbacks.displayScore = function(result, strategy) {
-      var score = result.score;
-      var div = document.createElement("div");
-      div.innerHTML = strategy + " Score: " + score;
-      psiDiv.insertBefore(div, null);
-    }
-
-    callbacks.displayTopPageSpeedSuggestions = function(result) {
-      // console.log(result);
-      var results = [];
-      var ruleResults = result.formattedResults.ruleResults;
-
-      for (var i in ruleResults) {
-        var ruleResult = ruleResults[i];
-        // Don't display lower-impact suggestions.
-        if (ruleResult.ruleImpact < 3.0) continue;
-        results.push({name: ruleResult.localizedRuleName,
-                      impact: ruleResult.ruleImpact,
-                      // url: ruleResult.urlBlocks[0].header.args[0].value
-                    });
-      }
-      results.sort(sortByImpact);
-      var ul = document.createElement('ul');
-      for (var i = 0, len = results.length; i < len; ++i) {
-        var r = document.createElement('li');
-        // var a = document.createElement('a');
-        // a.href = results[i].url;
-        // a.innerHTML = results[i].name;
-        // r.appendChild(a);
-        r.innerHTML = results[i].name;
-        ul.insertBefore(r, null);
-      }
-      if (ul.hasChildNodes()) {
-        // document.body.insertBefore(ul, null);
-        psiDiv.appendChild(ul, null);
-      } else {
-        var div = document.createElement('div');
-        div.innerHTML = 'No high impact suggestions. Good job!';
-        // document.body.insertBefore(div, null);
-        psiDiv.appendChild(div, null);
-      }
-    };
-
     // Helper function that sorts results in order of impact.
     function sortByImpact(a, b) { return b.impact - a.impact; }
+    injectAnythingIntoPageScript(sortByImpact);
 
     // Our JSONP callback. Checks for errors, then invokes our callback handlers.
     function runPagespeedCallbacksDesktop(result) {
+      var psiDiv = document.querySelector("#psiDiv");
+
+      var callbacks = {}
+
+      callbacks.clearScreen = function() {
+        if (psiDiv.innerHTML === "Querying the PageSpeed API...") psiDiv.innerHTML = "";
+      }
+
+      callbacks.displayScore = function(result, strategy) {
+        var score = result.score;
+        var div = document.createElement("div");
+        div.innerHTML = strategy + " Score: " + score;
+        psiDiv.insertBefore(div, null);
+      }
+
+      callbacks.displayTopPageSpeedSuggestions = function(result) {
+        // console.log(result);
+        var results = [];
+        var ruleResults = result.formattedResults.ruleResults;
+
+        for (var i in ruleResults) {
+          var ruleResult = ruleResults[i];
+          // Don't display lower-impact suggestions.
+          if (ruleResult.ruleImpact < 3.0) continue;
+          results.push({name: ruleResult.localizedRuleName,
+                        impact: ruleResult.ruleImpact,
+                        // url: ruleResult.urlBlocks[0].header.args[0].value
+                      });
+        }
+        results.sort(sortByImpact);
+        var ul = document.createElement('ul');
+        for (var i = 0, len = results.length; i < len; ++i) {
+          var r = document.createElement('li');
+          // var a = document.createElement('a');
+          // a.href = results[i].url;
+          // a.innerHTML = results[i].name;
+          // r.appendChild(a);
+          r.innerHTML = results[i].name;
+          ul.insertBefore(r, null);
+        }
+        if (ul.hasChildNodes()) {
+          // document.body.insertBefore(ul, null);
+          psiDiv.appendChild(ul, null);
+        } else {
+          var div = document.createElement('div');
+          div.innerHTML = 'No high impact suggestions. Good job!';
+          // document.body.insertBefore(div, null);
+          psiDiv.appendChild(div, null);
+        }
+      };
+
       var strategy = "Desktop";
+      var apiKey = "AIzaSyAHehZ3CRwWG3cpCGF3WRTLdWxD0XXDdaI";
       if (result.error) {
         var errors = result.error.errors;
         for (var i = 0, len = errors.length; i < len; ++i) {
@@ -165,9 +156,61 @@ chrome.extension.sendMessage({}, function(response) {
         }
       }
     }
+    injectAnythingIntoPageScript(runPagespeedCallbacksDesktop);
 
     function runPagespeedCallbacksMobile(result) {
+      var psiDiv = document.querySelector("#psiDiv");
+      var callbacks = {}
+
+      callbacks.clearScreen = function() {
+        if (psiDiv.innerHTML === "Querying the PageSpeed API...") psiDiv.innerHTML = "";
+      }
+
+      callbacks.displayScore = function(result, strategy) {
+        var score = result.score;
+        var div = document.createElement("div");
+        div.innerHTML = strategy + " Score: " + score;
+        psiDiv.insertBefore(div, null);
+      }
+
+      callbacks.displayTopPageSpeedSuggestions = function(result) {
+        // console.log(result);
+        var results = [];
+        var ruleResults = result.formattedResults.ruleResults;
+
+        for (var i in ruleResults) {
+          var ruleResult = ruleResults[i];
+          // Don't display lower-impact suggestions.
+          if (ruleResult.ruleImpact < 3.0) continue;
+          results.push({name: ruleResult.localizedRuleName,
+                        impact: ruleResult.ruleImpact,
+                        // url: ruleResult.urlBlocks[0].header.args[0].value
+                      });
+        }
+        results.sort(sortByImpact);
+        var ul = document.createElement('ul');
+        for (var i = 0, len = results.length; i < len; ++i) {
+          var r = document.createElement('li');
+          // var a = document.createElement('a');
+          // a.href = results[i].url;
+          // a.innerHTML = results[i].name;
+          // r.appendChild(a);
+          r.innerHTML = results[i].name;
+          ul.insertBefore(r, null);
+        }
+        if (ul.hasChildNodes()) {
+          // document.body.insertBefore(ul, null);
+          psiDiv.appendChild(ul, null);
+        } else {
+          var div = document.createElement('div');
+          div.innerHTML = 'No high impact suggestions. Good job!';
+          // document.body.insertBefore(div, null);
+          psiDiv.appendChild(div, null);
+        }
+      };
+
       var strategy = "Mobile";
+      var apiKey = "AIzaSyAHehZ3CRwWG3cpCGF3WRTLdWxD0XXDdaI";
       if (result.error) {
         var errors = result.error.errors;
         for (var i = 0, len = errors.length; i < len; ++i) {
@@ -189,16 +232,19 @@ chrome.extension.sendMessage({}, function(response) {
         }
       }
     }
+    injectAnythingIntoPageScript(runPagespeedCallbacksMobile);
 
     // Invokes the PageSpeed Insights API. The response will contain
     // JavaScript that invokes our callback with the PageSpeed results.
     // type is a string of either "mobile" or "desktop", indicating strategy
-    function runPagespeed(strategy) {
+    function runPagespeed(strategy, url) {
+      var apiKey = "AIzaSyAHehZ3CRwWG3cpCGF3WRTLdWxD0XXDdaI";  //identified as localhost
+      var psiURL = 'https://www.googleapis.com/pagespeedonline/v1/runPagespeed?';
       var s = document.createElement('script');
       s.type = 'text/javascript';
       s.async = true;
       var query = [
-        'url=' + studentURL,
+        'url=' + url,
         'callback=runPagespeedCallbacks' + strategy,
         'key=' + apiKey,
         'strategy=' + strategy,    // TODO: needs a mobile call too!
@@ -206,22 +252,47 @@ chrome.extension.sendMessage({}, function(response) {
       s.src = psiURL + query;
       document.head.insertBefore(s, null);
     }
+    injectAnythingIntoPageScript(runPagespeed);
 
-    var strategies = ["Desktop", "Mobile"];
 
     function runTests() {
+      var psiDiv = document.querySelector("#psiDiv");
+      var strategies = ["Desktop", "Mobile"];
+      var waitingText = "Querying the PageSpeed API...";
       psiDiv.innerHTML = waitingText;
-      getStudentURL();
+      var url = getStudentURL();
       
       // refers to mobile and desktop
       for (s in strategies) {
         currentStrategy = strategies[s];
-        runPagespeed(currentStrategy);
+        runPagespeed(currentStrategy, url);
       }
     }
     injectAnythingIntoPageScript(runTests);
 
+
     function takeOverConsole(){
+        var fpsArray = [];
+
+        Array.prototype.push = function() {
+          var sum = 0;
+          for( var i = 0, l = arguments.length; i < l; i++ )
+          {
+            this[this.length] = arguments[i];
+            // alert(fpsArray);
+          }
+
+          if ( arguments[0].toString().match(/[1-9]+\.[0-9]+/) === null ) return this.length;
+
+          for(i in fpsArray) {
+            sum = sum + fpsArray[i];
+          }
+          // alert(sum);
+          var averageFPS = sum / parseFloat(fpsArray.length);
+          alert(averageFPS);  // seems to be working!!!
+          return this.length;
+        };
+        
         var console = window.console;
         if (!console) return;
         function intercept(method){
@@ -231,9 +302,11 @@ chrome.extension.sendMessage({}, function(response) {
             
             // do sneaky stuff
 
+
+
             if (message.indexOf("Average time to generate last 10 frames:") !== -1) {
                 var reMS = /[1-9]+\.[0-9]+/;
-                var timeMS = parseFloat(message.match(reMS)[0]);
+                var timeMS = parseFloat(message.match(reMS));
                 var timeS = timeMS * 0.001;  
                 var fps = 1.0 / timeS;
                 // alert(fps);    // fps works. sometimes NaN? might need to deal with that.
@@ -244,69 +317,68 @@ chrome.extension.sendMessage({}, function(response) {
           }
         }
         var methods = ['log', 'warn', 'error']
-        for (var i = 0; i < methods.length; i++)
+        for (var i = 0; i < methods.length; i++) {
             intercept(methods[i])
+        }
     };
-    
-    
-
 
     // inject DOM elements into top of page
 
-    function globals() {
-      var divInput = document.createElement("div");
+    function divBuilder() {
+      var scoreResults = document.createElement('div');
+      scoreResults.id = "scoreResults";
+      scoreResults.style.background = "white";
+
+      // var divInput = document.createElement("div");
+
       var psiDiv = document.createElement('div');
+      psiDiv.id = "psiDiv";
+
       var fpsDiv = document.createElement('div');
       var textInput = document.createElement("input");
       textInput.id = "stdURL";
       textInput.type = "text";
       textInput.value = "http://www.udacity.com";
       textInput.onkeypress = searchKeyPress.bind(window, event);
+      // textInput.onkeypress = searchKeyPress(event); // this might break
 
       var btnInput = document.createElement("button");
       btnInput.id = "btn";
       btnInput.value = "Score PS Insights";
-      btnInput.onclick = runtests.bind(window, null);   // maybe document?
+      // btnInput.onclick = runTests.bind(window, null);   // maybe document?
+      btnInput.onclick = runTests;
 
       var body = document.body;
 
-      body.insertBefore(fpsDiv, body.firstChild);
-      body.insertBefore(psiDiv, body.firstChild);
-      body.insertBefore(btnInput, body.firstChild);
-      body.insertBefore(textInput, body.firstChild);
+      body.insertBefore(scoreResults, body.firstChild);
 
-      var fpsArray = [];
-      Array.prototype.push = function() {
-        for( var i = 0, l = arguments.length; i < l; i++ )
-        {
-          this[this.length] = arguments[i];
-          calcFPS();
-        }
-        alert(fpsArray);
-        return this.length;
-      };
+      scoreResults.appendChild(fpsDiv);
+      scoreResults.appendChild(psiDiv);
+      scoreResults.appendChild(btnInput);
+      scoreResults.appendChild(textInput);
+
     }
-    
-    // fps
-    // function to update fps
-    function calcFPS() {
-      var sum = 0.0;
-      for(i in fpsArray) {
-        sum = sum + i;
-      }
-      alert(sum);
-    }
-    injectAnythingIntoPageScript(calcFPS);
+    // injectAnythingIntoPageScript(divBuilder);
+    runAsPage(divBuilder);
+
+    // function buildTopOfPage() {
+    //   divBuilder();
+    // }
+    // runAsPage(buildTopOfPage);
+
+    //need to run
 
     // need to scroll
-    var scrolltimer = setInterval(function() {
-      console.log("scroll");
-      scrollBy(0,5);
-    }, 1)
-    setTimeout(clearInterval(scrolltimer), 100);  // do like bind?
+    function scroller () {
+      var scrolltimer = window.setInterval(function() {
+        console.log("scrolling!");
+        scrollBy(0,50);
+      }, 1)
+      window.setTimeout(clearInterval(scrolltimer), 500);  // do like bind?
+    }
+    // runAsPage(scroller);
 
 
-    injectAnythingIntoPageScript(globals);
     // runAsPage(arrayPusherHack);
     setTimeout(runAsPage.bind('bullshit', takeOverConsole), 2000);
     // setTimeout(runAsPage.bind('bullshit', startPSI), 1000);
