@@ -274,29 +274,23 @@ chrome.extension.sendMessage({}, function(response) {
     function takeOverConsole(){
         var fpsArray = [];
 
-        function pushFPS(number) {
+        function fpsDisplay(number) {
           var fpsDiv = document.querySelector("#fpsDiv");
-          fpsDiv.innerHTML = "FPS: " + number;
+          fpsDiv.innerHTML = "Framerate: " + number + "fps. (FPS should be at least 60fps)";
         }
-
-        Array.prototype.push = function() {
+        
+        function fpsPush(number) {
           var sum = 0;
-          for( var i = 0, l = arguments.length; i < l; i++ )
-          {
-            this[this.length] = arguments[i];
-          }
-
-          if ( arguments[0].toString().match(/[1-9]+\.[0-9]+/) === null ) return this.length;
-
+          if (number === NaN) return false;
+          fpsArray.push(number);
           for(i in fpsArray) {
             sum = sum + fpsArray[i];
           }
           // alert(sum);
           var averageFPS = sum / parseFloat(fpsArray.length); // sometimes NaN?
-          pushFPS(averageFPS);
-          return this.length;
-        };
-        
+          fpsDisplay(averageFPS);
+        }
+
         var console = window.console;
         if (!console) return;
         function intercept(method){
@@ -314,14 +308,17 @@ chrome.extension.sendMessage({}, function(response) {
               var timeS = timeMS * 0.001;  
               var fps = 1.0 / timeS;
               // alert(fps);    // fps works. sometimes NaN? might need to deal with that.
-              fpsArray.push(fps);
-              // fpsArray.push(fps); // TODO: make special push for this array
+              fpsPush(fps);
             }
 
             if (message.indexOf("Time to resize pizzas:") !== -1) {
               var reMS = /[1-9]+\.[0-9]+/;
               var timeMS = parseFloat(message.match(reMS));
-              document.querySelector("#resizeDiv").innerHTML = "Time to resize pizzas: " + timeMS + "ms";
+              if (timeMS === NaN) {
+                resizePizzas("1");
+                var timeMS = parseFloat(message.match(reMS));
+              }
+              document.querySelector("#resizeDiv").innerHTML = "Time to resize pizzas: " + timeMS + "ms. (Resize time should be less than 5ms.)";
             }
 
             original.call(console, message);
@@ -389,7 +386,6 @@ chrome.extension.sendMessage({}, function(response) {
     function scroller() {
       window.scrollTo(0,0);
       var scrolltimer = setInterval(function() {
-        console.log("scrolling!");
         window.scrollBy(0,50);
       }, 100)
       setTimeout(function() {
