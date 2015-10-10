@@ -16,6 +16,9 @@ Cameron Pittman, Udacity Course Developer
 cameron *at* udacity *dot* com
 */
 
+/* ss01 10/10/2015 - per the Browser Renering Optimization lessone I changed this to remove the FSL Forced Sync Layout */
+
+
 // As you may have realized, this website randomly generates pizzas.
 // Here are arrays of all possible pizza ingredients.
 var pizzaIngredients = {};
@@ -449,13 +452,36 @@ var resizePizzas = function(size) {
 
   // Iterates through pizza elements on the page and changes their widths
   function changePizzaSizes(size) {
+    /* ss01 replaced this code to remove the FSL
     for (var i = 0; i < document.querySelectorAll(".randomPizzaContainer").length; i++) {
       var dx = determineDx(document.querySelectorAll(".randomPizzaContainer")[i], size);
       var newwidth = (document.querySelectorAll(".randomPizzaContainer")[i].offsetWidth + dx) + 'px';
+      var newwidth = (randomPizzas[i].odds)
       document.querySelectorAll(".randomPizzaContainer")[i].style.width = newwidth;
+    } */
+
+      // use this instead of calling the size switcher function
+    switch(size) {
+      case "1":
+        newWidth = 25;
+        break;
+      case "2":
+        newWidth = 33.3;
+        break;
+      case "3":
+        newWidth = 50;
+        break;
+      default:
+        console.log("Invalid size - it should be 1,2 or 3; size = " + size);
+    }
+ 
+    //ss01 changed  the above code to eliminate the FSL
+    var randomPizzas = document.querySelectorAll(".randomPizzaContainer"); //ss01 store the pizza sizeSwitcher
+    for (var i = 0; i < randomPizzas.length; i++) {
+      //randomPizzas[i].style.width = sizeSwitcher(size) * 100 + "%"; 
+      randomPizzas[i].style.width = newWidth + "%"; 
     }
   }
-
   changePizzaSizes(size);
 
   // User Timing API is awesome
