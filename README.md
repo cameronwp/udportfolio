@@ -39,7 +39,7 @@ Profile, optimize, measure... and then lather, rinse, and repeat. Good luck!
 * <a href="https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/http-caching.html">HTTP caching</a>
 
 ### Customization with Bootstrap
-The portfolio was built on Twitter's <a href="http://getbootstrap.com/">Bootstrap</a> framework. All custom styles are in `dist/css/portfolio.css` in the portfolio repo.
+The portfolio was built on Twitter's <a href="http://getbootstrap.com/">Bootstrap</a> framework.
 
 * <a href="http://getbootstrap.com/css/">Bootstrap's CSS Classes</a>
 * <a href="http://getbootstrap.com/components/">Bootstrap's Components</a>
